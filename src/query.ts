@@ -1,5 +1,5 @@
-import { VueApolloQueryDefinition, ErrorHandler } from 'vue-apollo/types/options';
-import { ApolloError, OperationVariables } from 'apollo-client';
+import { ErrorHandler } from 'vue-apollo/types/options';
+import { ApolloError, OperationVariables, QueryOptions } from 'apollo-client';
 import { DocumentNode } from 'graphql';
 import { Vue } from 'vue/types/vue';
 import { ApolloOperationErrorHandlerFunction } from './types';
@@ -24,16 +24,14 @@ export type VueApolloSmartQueryOptions<
   TVariables = OperationVariables,
   TError = ApolloError,
   TApp extends Vue = Vue
-> = Omit<VueApolloQueryDefinition<TResult, TVariables>, 'subscribeToMore' | 'error'> & {
+> = Omit<QueryOptions<TVariables>, 'subscribeToMore' | 'error'> & {
   error?: VueApolloSmartQueryErrorHandler<TResult, TVariables, TError, TApp>;
 };
 
 export function createSmartQueryOptionsFunction<TResult, TVariables, TError = ApolloError, TApp extends Vue = Vue>(
   query: DocumentNode,
   onError?: ApolloOperationErrorHandlerFunction<TError, TApp>,
-): (
-  options?: Partial<VueApolloSmartQueryOptions<TResult, TVariables, TError, TApp>>,
-) => VueApolloQueryDefinition<TResult, TVariables> {
+): (options?: Partial<VueApolloSmartQueryOptions<TResult, TVariables, TError, TApp>>) => QueryOptions<TVariables> {
   return (options = {}) => {
     const defaultErrorHandlerFn: VueApolloSmartQueryErrorHandler<TResult, TVariables, TError, TApp> = (
       error: TError,
