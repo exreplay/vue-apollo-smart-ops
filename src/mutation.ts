@@ -41,12 +41,14 @@ export type MutationOperationFunction<TResult, TVariables extends OperationVaria
 export interface MutationOperationParams<
   TVariables extends OperationVariables,
   TError = ApolloError,
-  TContext = ApolloOperationContext
+  TContext = ApolloOperationContext,
+  R = any
 > {
   mutation: DocumentNode;
   variables: TVariables;
   context?: TContext;
   onError?: ApolloOperationErrorHandlerFunction<TError>;
+  options?: MutationOptions<R, TVariables>;
 }
 
 // Result object returned by a MutationOperationFunction
@@ -86,7 +88,7 @@ export async function mutateWithErrorHandling<
   TApp extends VueAppWithApollo = VueAppWithApollo
 >(
   app: TApp,
-  { mutation, variables, onError, context }: MutationOperationParams<TVariables, TError>,
+  { mutation, variables, onError, context, options }: MutationOperationParams<TVariables, TError>,
   client?: ApolloMutationClient<TResult, TVariables>,
 ): Promise<MutationResult<TResult>> {
   const mutate =
@@ -96,6 +98,7 @@ export async function mutateWithErrorHandling<
     const result = await mutate({
       mutation,
       variables: cleanInput(variables),
+      ...options,
     });
 
     if (result == null) {

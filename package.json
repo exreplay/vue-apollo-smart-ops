@@ -1,5 +1,5 @@
 {
-  "name": "vue-apollo-smart-ops",
+  "name": "@averjs/vue-apollo-smart-ops",
   "version": "0.0.3",
   "description": "Create TypeScript-typed operation functions for your Vue Apollo queries and mutations.",
   "author": "Madscience Ltd",
@@ -11,6 +11,9 @@
     "type": "git",
     "url": "https://github.com/madscience/vue-apollo-smart-ops.git"
   },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "prebuild": "rimraf dist && npm run barrels:generate",
     "build": "tsc -p tsconfig.build.json",
